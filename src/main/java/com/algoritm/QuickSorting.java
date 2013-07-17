@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Random;
 
 /**
  * Created with IntelliJ IDEA.
@@ -43,17 +44,25 @@ public class QuickSorting {
         int[] testArray1 = {4,8,7,1,3,5,6,2,11,16, -1, -5};
 
         //doSort(testArray1, 0, testArray1.length-1);
-        comparisonCount = 0L;
-        doSort(ia,0,ia.length-1);
-        System.out.println(comparisonCount);
+        Long min = Long.MAX_VALUE;
+        for(int i = 0; i< 1500; i++) {
+            comparisonCount = 0L;
+            int[] arrClone = (int[])(ia.clone());
+            doSort(arrClone,0,arrClone.length-1);
+            if(comparisonCount < min) {
+                min = comparisonCount;
+            }
+        }
+        System.out.println(min);
     }
 
     public static void doSort(int[] arr, int low, int high) {
         if(low < high) {
             comparisonCount += high - low;
-            int p = partitionByFirstElement(arr, low, high);
+            //int p = partitionByFirstElement(arr, low, high);
             //int p = partiionByLastElement(arr,low, high);
             //int p = partitionByMedian(arr,low, high);
+            int p = partionByRandomElment(arr, low, high);
             doSort(arr,low, p-1);
             doSort(arr,p+1, high);
         }
@@ -77,6 +86,13 @@ public class QuickSorting {
     public static int partiionByLastElement(int[] array, int low, int high) {
        swap(array,low,high);
        return partitionByFirstElement(array, low, high);
+    }
+
+    public static int partionByRandomElment(int[] array , int low, int high) {
+        Random generator = new Random();
+        int p = low + generator.nextInt(high-low + 1);
+        swap(array, low, p);
+        return partitionByFirstElement(array, low, high);
     }
 
     public static int partitionByMedian(int[] array, int low, int high) {
