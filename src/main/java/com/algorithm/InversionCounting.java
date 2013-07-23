@@ -1,4 +1,4 @@
-package com.algoritm;
+package com.algorithm;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
