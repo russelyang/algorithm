@@ -128,14 +128,14 @@ public class AdjacencyListGraphTest {
 
     AdjacencyListGraph buildGraph1() {
         AdjacencyListGraph graph = new AdjacencyListGraph();
-        graph.addEdges(1, new int[]{2, 3, 4});
-        graph.addEdges(2, new int[]{1, 3, 4, 5});
-        graph.addEdges(3, new int[]{1, 2, 4});
-        graph.addEdges(4, new int[] {1,2,3,6});
-        graph.addEdges(5, new int[] {2,6,7,8});
-        graph.addEdges(6, new int[] {4,5,7,8});
-        graph.addEdges(7, new int[]{5, 6, 8});
-        graph.addEdges(8, new int[]{5, 6, 7});
+        graph.addEdges(1, new Integer[]{2, 3, 4});
+        graph.addEdges(2, new Integer[]{1, 3, 4, 5});
+        graph.addEdges(3, new Integer[] {1, 2, 4});
+        graph.addEdges(4, new Integer[] {1,2,3,6});
+        graph.addEdges(5, new Integer[] {2,6,7,8});
+        graph.addEdges(6, new Integer[] {4,5,7,8});
+        graph.addEdges(7, new Integer[]{5, 6, 8});
+        graph.addEdges(8, new Integer[]{5, 6, 7});
 
         return graph;
     }
@@ -143,14 +143,14 @@ public class AdjacencyListGraphTest {
 
     AdjacencyListGraph buildGraphMinCut1() {
         AdjacencyListGraph graph = new AdjacencyListGraph();
-        graph.addEdges(1, new int[]{2, 3, 4});
-        graph.addEdges(2, new int[]{1, 3, 4, 5});
-        graph.addEdges(3, new int[]{1, 2, 4});
-        graph.addEdges(4, new int[] {1,2,3});
-        graph.addEdges(5, new int[] {2,6,7,8});
-        graph.addEdges(6, new int[] {5,7,8});
-        graph.addEdges(7, new int[]{5, 6, 8});
-        graph.addEdges(8, new int[]{5, 6, 7});
+        graph.addEdges(1, new Integer[]{2, 3, 4});
+        graph.addEdges(2, new Integer[]{1, 3, 4, 5});
+        graph.addEdges(3, new Integer[]{1, 2, 4});
+        graph.addEdges(4, new Integer[] {1,2,3});
+        graph.addEdges(5, new Integer[] {2,6,7,8});
+        graph.addEdges(6, new Integer[] {5,7,8});
+        graph.addEdges(7, new Integer[]{5, 6, 8});
+        graph.addEdges(8, new Integer[]{5, 6, 7});
 
         return graph;
     }

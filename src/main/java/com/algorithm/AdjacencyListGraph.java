@@ -23,7 +23,7 @@ public class AdjacencyListGraph {
         adj.put(i, edges);
     }
 
-    public void addEdges(int i, int[] edges) {
+    public void addEdges(Integer i, Integer[] edges) {
         for(int edge : edges) {
             addEdge(i, edge);
         }
