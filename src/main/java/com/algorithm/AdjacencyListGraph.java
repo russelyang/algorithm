@@ -3,95 +3,94 @@ package com.algorithm;
 import java.util.*;
 
 public class AdjacencyListGraph {
-    private Map<Integer, ArrayList<Integer>> adj;
+    private List<Edge> _edges;
+    private Map<Vertex, List<Edge>> _vetices;
     private Random generator = new Random();
 
     public AdjacencyListGraph() {
-        adj = new HashMap<Integer, ArrayList<Integer>>();
+        _edges = new ArrayList<Edge>();
+        _vetices = new HashMap<Vertex, List<Edge>>();
     }
 
     public int numberOfVertices() {
-        return adj.size();
+        return _vetices.size();
+    }
+
+    private void addVertex(Vertex v) {
+        if(!_vetices.containsKey(v)) {
+            _vetices.put(v, new ArrayList<Edge>());
+        }
     }
 
     public void addEdge(int i, int j) {
-        ArrayList<Integer> edges = adj.get(i);
-        if(null == edges) {
-            edges = new ArrayList<Integer>();
-        }
-        edges.add(j);
-        adj.put(i, edges);
+        Vertex tail = new Vertex(i);
+        Vertex head = new Vertex(j);
+
+        addEdge(tail,head);
     }
 
-    public void addEdges(Integer i, Integer[] edges) {
-        for(int edge : edges) {
-            addEdge(i, edge);
+    public void addEdge(Edge e) {
+        addEdge(e.getV1(), e.getV2());
+    }
+
+    public void addEdge(Vertex tail, Vertex head) {
+        addVertex(tail);
+        addVertex(head);
+
+        Edge e = new Edge(tail, head);
+        _vetices.get(tail).add(e);
+        _edges.add(e);
+    }
+
+    public void addEdges(Integer i, Integer[] heads) {
+        for(int head : heads) {
+            addEdge(i, head);
         }
     }
 
     public int numberOfEdges()
     {
-        int total = 0;
-        Iterator<Integer> it = adj.keySet().iterator();
-
-        while(it.hasNext()) {
-            ArrayList<Integer> edges = adj.get(it.next());
-            total += edges.size();
-        }
-        return total;
+        return _edges.size();
     }
 
+    /*
+    the edges when vertices equeals 2.
+     */
     public int numberOfCuts()
     {
-        return this.numberOfEdges() /  2;
+        Iterator<Vertex> itVertices = _vetices.keySet().iterator();
+
+        int first = _vetices.get(itVertices.next()).size();
+        int second = _vetices.get(itVertices.next()).size();
+
+        return first > second ? first : second;
     }
 
-    public List<Integer> outEdges(int i) {
-        return adj.get(i);
-    }
-
-    public List<Integer> inEdges(int j) {
-        List<Integer> edges = new ArrayList<Integer>();
-        Iterator<Integer> it = adj.keySet().iterator();
-        while(it.hasNext()) {
-            Integer key = it.next();
-            List<Integer> inEdges = adj.get(key);
-            if(inEdges.contains(j)) {
-               edges.add(key);
-            }
-        }
-        return edges;
-    }
-
-    AdjacencyListGraph fuseByEdge(Vertex v1, Vertex v2) {
+    AdjacencyListGraph contract(Vertex v1, Vertex v2) {
         AdjacencyListGraph fusedGraph = new AdjacencyListGraph();
 
-        //copy all the vertices and edges to new fused graph
-        Iterator<Integer> it = this.adj.keySet().iterator();
-        while (it.hasNext()) {
-            Integer key = it.next();
-            Iterator<Integer> itEdges = this.adj.get(key).iterator();
-
-            while(itEdges.hasNext()) {
-                Integer edge = itEdges.next();
-
-                if(key == v1.getValue()) {
-                    if(edge != v2.getValue()) {
-                       fusedGraph.addEdge(v2.getValue(), edge);
-                    }
-                } else if (key == v2.getValue()) {
-                    if(edge != v1.getValue()) {
-                        fusedGraph.addEdge(key, edge);
+        for(Edge e : _edges) {
+            if(e.getV1().equals(v1)) {
+               if(!e.getV2().equals(v2)) {
+                fusedGraph.addEdge(v2, e.getV2());
+               }
+            } else {
+                if(e.getV1().equals(v2)) {
+                    if(!e.getV2().equals(v1)) {
+                        fusedGraph.addEdge(v2, e.getV2());
                     }
                 } else {
-                    if(edge == v1.getValue()) {
-                        fusedGraph.addEdge(key, v2.getValue());
+                    if(e.getV2().equals(v1)) {
+                        fusedGraph.addEdge(e.getV1().getValue(), v2.getValue());
                     } else {
-                        fusedGraph.addEdge(key, edge);
+                        fusedGraph.addEdge(e);
                     }
                 }
             }
         }
+
+        //copy over the vertices
+
 
         return fusedGraph;
     }
@@ -100,28 +99,13 @@ public class AdjacencyListGraph {
         AdjacencyListGraph fused = this;
         while(fused.numberOfVertices() > 2) {
             Edge edge = fused.randomEdge();
-            fused = fused.fuseByEdge(edge.getV1(),edge.getV2());
+            fused = fused.contract(edge.getV1(), edge.getV2());
         }
         return fused;
     }
 
-    public List<Edge> getAllEdges() {
-        List<Edge> edges = new ArrayList<Edge>();
-        Iterator<Integer> it = adj.keySet().iterator();
-        while(it.hasNext()) {
-            Integer key = it.next();
-            List<Integer> inEdges = outEdges(key);
-            Iterator<Integer> edgeIt = inEdges.iterator();
-            while(edgeIt.hasNext()) {
-                edges.add(new Edge(new Vertex(key), new Vertex(edgeIt.next())));
-            }
-        }
-        return edges;
-    }
-
     public Edge randomEdge() {
-        Edge[] edges = getAllEdges().toArray( new Edge[] {});
-        int index = generator.nextInt(edges.length);
-        return edges[index];
+        int index = generator.nextInt(_edges.size());
+        return _edges.get(index);
     }
 }

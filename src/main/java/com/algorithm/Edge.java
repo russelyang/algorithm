@@ -5,6 +5,11 @@ class Edge {
     private Vertex _v1;
     private Vertex _v2;
 
+    /*
+        Edge from v1 to v2
+        v1 = tail
+        v2 = head
+    */
     public Edge(Vertex v1, Vertex v2) {
         this._v1 = v1;
         this._v2 = v2;

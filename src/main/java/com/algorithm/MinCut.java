@@ -11,7 +11,6 @@ import java.util.List;
  * User: ryang
  * Date: 2013-07-23
  * Time: 6:53 AM
- * To change this template use File | Settings | File Templates.
  */
 public class MinCut {
     public static void main(String[] args) throws IOException{
@@ -41,10 +40,10 @@ public class MinCut {
             reader.close();
         }
 
-        int minCut = graph.numberOfCuts();
-        for(int i=0; i< 500; i++) {
+        int minCut = Integer.MAX_VALUE;
+        for(int i=0; i< 100; i++) {
             AdjacencyListGraph next = graph.fuse();
-            if(minCut > next.numberOfCuts()) {
+            if(minCut > next.numberOfCuts() && next.numberOfCuts() != -1) {
                 minCut = next.numberOfCuts();
             }
         }
